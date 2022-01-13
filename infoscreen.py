@@ -9,23 +9,25 @@ from io import BytesIO
 from zipfile import ZipFile
 import os
 import time
+import socket
 
 
 class ComputerInfo:
 
-    def __init__(self):
-        pass
+    def __init__(self, os, macaddress, ip):
+        self.macaddress = macaddress
+        self.ip = ip
+        self.os = os
 
-    def computer_macadress(self, device):
-        macaddress = hex(uuid.getnode())
-        ':'.join(a+b for a,b in zip(macaddress[::2], macaddress[1::2]))
-        return macaddress
+    def get_macadress(self):
 
-    def computer_ip(self):
-        pass
+        return self.macaddress
 
-    def computer_platform(self):
-        return platform.system()
+    def get_ip(self):
+        return self.ip
+
+    def get_os(self):
+        return self.os
 
 
 
@@ -36,7 +38,7 @@ def start_webdriver(this_platform):
 
     if this_platform == "windows":
         this_path = "C:\\Chrome\\Chromedriver.exe"
-    elif:
+    else:
         this_platform = os.getcwd()
 
     try:
@@ -70,12 +72,7 @@ def get_url():
     time.sleep(900)
     return this_url
 
-
-
-
-if __name__ == "__main__":
-
-
+def start_webdriver():
     # Loading webdriver
     # Get webdriver from here: https://chromedriver.chromium.org/downloadsa
     options = webdriver.ChromeOptions()
@@ -86,6 +83,26 @@ if __name__ == "__main__":
 
     browser.get(get_url())
     time.sleep(900)
+
+def main():
+    macaddress = hex(uuid.getnode())
+    macaddress = ':'.join(a + b for a, b in zip(macaddress[::2], macaddress[1::2]))
+    ip = socket.gethostbyname(socket.gethostname())
+    os = platform.system()
+
+
+    c = ComputerInfo(os, macaddress, ip)
+
+    print(c.get_os())
+    print(c.get_macadress())
+    print(c.get_ip())
+
+
+if __name__ == "__main__":
+    main()
+
+
+
 
 
 
